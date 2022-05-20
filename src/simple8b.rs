@@ -17,7 +17,7 @@ pub struct Encoder {
 
 #[allow(dead_code)]
 impl Encoder {
-    fn new() -> Self {
+    pub fn new() -> Self {
         Encoder {
             buf: [0; BUF_SIZE],
             h: 0,
@@ -28,14 +28,14 @@ impl Encoder {
         }
     }
 
-    fn set_values(&mut self, v: [u64; BUF_SIZE]) {
+    pub fn set_values(&mut self, v: [u64; BUF_SIZE]) {
         self.buf = v;
         self.t = self.buf.len();
         self.h = 0;
         self.bytes = [0; BUF_SIZE * 8]
     }
 
-    fn reset(&mut self) {
+    pub fn reset(&mut self) {
         self.h = 0;
         self.t = 0;
         self.bp = 0;
@@ -45,7 +45,7 @@ impl Encoder {
         self.b = [0u8; 8];
     }
 
-    fn write(&mut self, v: u64) {
+    pub fn write(&mut self, v: u64) {
         if self.t >= self.buf.len() {
             return;
         }
@@ -59,7 +59,7 @@ impl Encoder {
         self.t += 1;
     }
 
-    fn flush(&mut self) {
+    pub fn flush(&mut self) {
         if self.t == 0 {
             return;
         }
@@ -83,22 +83,22 @@ impl Encoder {
         return ();
     }
 
-    fn bytes(&self) -> &[u8] {
+    pub fn bytes(&self) -> &[u8] {
         return &self.bytes[..self.bp];
     }
 }
 
 #[allow(dead_code)]
-struct Decoder {
-    bytes: [u8; BUF_SIZE * 8],
-    buf: [u64; BUF_SIZE],
-    i: usize,
-    n: usize,
+pub struct Decoder {
+    pub bytes: [u8; BUF_SIZE * 8],
+    pub buf: [u64; BUF_SIZE],
+    pub i: usize,
+    pub n: usize,
 }
 
 #[allow(dead_code)]
 impl Decoder {
-    fn new(bytes: [u8; BUF_SIZE * 8]) -> Self {
+    pub fn new(bytes: [u8; BUF_SIZE * 8]) -> Self {
         Decoder {
             bytes: bytes,
             buf: [0; BUF_SIZE],
@@ -107,14 +107,15 @@ impl Decoder {
         }
     }
 
-    fn next(&mut self) -> bool {
+    // Error due to the fix arreay
+    pub fn next(&mut self) -> bool {
         self.i += 1;
 
         if self.i >= self.n {
             self.read();
         }
 
-        return self.bytes.len() >= 8 || (self.i >= 0 && self.i < self.n);
+        return self.bytes.len() >= 8 || (self.i < self.n);
     }
 
     fn set_bytes(&mut self, bytes: [u8; BUF_SIZE * 8]) {
