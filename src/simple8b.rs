@@ -89,16 +89,16 @@ impl Encoder {
 }
 
 #[allow(dead_code)]
-pub struct Decoder {
-    pub bytes: [u8; BUF_SIZE * 8],
+pub struct Decoder<'a> {
+    pub bytes: &'a [u8],
     pub buf: [u64; BUF_SIZE],
     pub i: usize,
     pub n: usize,
 }
 
 #[allow(dead_code)]
-impl Decoder {
-    pub fn new(bytes: [u8; BUF_SIZE * 8]) -> Self {
+impl<'a> Decoder<'a> {
+    pub fn new(bytes: &'a [u8]) -> Self {
         Decoder {
             bytes: bytes,
             buf: [0; BUF_SIZE],
@@ -112,13 +112,13 @@ impl Decoder {
         self.i += 1;
 
         if self.i >= self.n {
-            self.read();
+            self.read_and_move();
         }
 
         self.i < self.n
     }
 
-    fn set_bytes(&mut self, bytes: [u8; BUF_SIZE * 8]) {
+    fn set_bytes(&mut self, bytes: &'a [u8]) {
         self.bytes = bytes;
         self.i = 0;
         self.n = 0;
@@ -126,6 +126,17 @@ impl Decoder {
 
     fn read(&self) -> u64 {
         return self.buf[self.i];
+    }
+
+    fn read_and_move(&mut self) {
+        if self.bytes.len() < 8 {
+            return
+        }
+    
+        let v = BigEndian::read_u64(&self.bytes[..8]);
+        self.bytes = &self.bytes[8..];
+        self.n = decode(&mut self.buf, v);
+        self.i = 0;
     }
 }
 

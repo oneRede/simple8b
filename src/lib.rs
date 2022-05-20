@@ -1,4 +1,5 @@
 mod simple8b;
+mod simple8b_v2;
 
 use crate::simple8b::Encoder;
 
