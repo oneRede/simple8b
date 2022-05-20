@@ -107,7 +107,7 @@ impl Decoder {
         }
     }
 
-    // Error due to the fix arreay
+    // Error due to the fix array
     pub fn next(&mut self) -> bool {
         self.i += 1;
 
