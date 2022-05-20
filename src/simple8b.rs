@@ -896,9 +896,3 @@ fn unpack2(v: u64, dst: &mut [u64]) {
 fn unpack1(v: u64, dst: &mut [u64]) {
     dst[0] = v & 1152921504606846975;
 }
-
-fn main() {
-    let a = 9;
-    println!("{:?}", a >> 2);
-    println!("{:?}", a);
-}
