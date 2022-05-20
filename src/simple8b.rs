@@ -6,13 +6,13 @@ const BUF_SIZE: usize = 240;
 
 #[allow(dead_code)]
 #[derive(Copy, Clone)]
-struct Encoder {
-    buf: [u64; BUF_SIZE],
-    h: usize,
-    t: usize,
-    bp: usize,
-    bytes: [u8; BUF_SIZE * 8],
-    b: [u8; 8],
+pub struct Encoder {
+    pub buf: [u64; BUF_SIZE],
+    pub h: usize,
+    pub t: usize,
+    pub bp: usize,
+    pub bytes: [u8; BUF_SIZE * 8],
+    pub b: [u8; 8],
 }
 
 #[allow(dead_code)]
